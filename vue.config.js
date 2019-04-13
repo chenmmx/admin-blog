@@ -7,20 +7,6 @@ module.exports = {
         pathRewrite: {
           '^/v2': '/v2'
         }
-      },
-      '/cos': {
-        target: 'http://192.168.1.213:10099/test.php',
-        changeOrigin: true,
-        pathRewrite: {
-          '^/cos': ''
-        }
-      },
-      '/upload': {
-        target: 'https://chobits-maintain-1258572138.cos.ap-chengdu.myqcloud.com/',
-        changeOrigin: true,
-        pathRewrite: {
-          '^/upload': '/'
-        }
       }
     }
   },
