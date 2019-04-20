@@ -1,6 +1,12 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Layout from '@/components/Layout'
+import Home from '@/views/Home'
+import Comment from '@/views/Comment'
+import Users from '@/views/Users'
+import Management from '@/views/Article/Management'
+import Publish from '@/views/Article/Publish'
+import Account from '@/views/System/Account'
 
 Vue.use(Router)
 
@@ -11,6 +17,30 @@ export default new Router({
       path: '/',
       component: Layout,
       children: [
+        {
+          path: '',
+          component: Home
+        },
+        {
+          path: 'comment',
+          component: Comment
+        },
+        {
+          path: 'users',
+          component: Users
+        },
+        {
+          path: 'article/management',
+          component: Management
+        },
+        {
+          path: 'article/publish',
+          component: Publish
+        },
+        {
+          path: 'system/account',
+          component: Account
+        }
       ]
     }
     // {

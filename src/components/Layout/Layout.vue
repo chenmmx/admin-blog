@@ -44,26 +44,18 @@ export default {
         { name: '首页', path: '/home' },
         { name: '用户管理',
           children: [
-            { name: '终端管理' },
-            { name: '摄像头管理' },
-            { name: '车牌识别管理' },
-            { name: '版本管理' }
+            { name: '账号管理', path: '/users' }
           ] },
-        { name: '评论管理',
-          children: [
-            { name: '赤眸数据' },
-            { name: '移动端数据' },
-            { name: '平台数据' }
-          ] },
+        { name: '评论管理', path: '/comment' },
         { name: '文章管理',
           children: [
-            { name: '文章发表', path: '/mobile/notice' },
-            { name: '文章管理', path: '/mobile/questionnaire' }
+            { name: '文章管理', path: '/article/management' },
+            { name: '文章发表', path: '/article/publish' }
           ] },
         { name: '系统管理',
           children: [
             { name: '账号管理', path: '/system/account' },
-            { name: '角色管理', path: '/system/role' }
+            { name: '角色管理' }
           ]
         }
       ]
@@ -74,6 +66,8 @@ export default {
       console.log('index', index)
       if (index === '首页') {
         this.$router.push('/')
+      } else if (index === '评论管理') {
+        this.$router.push('/comment')
       }
     }
   }
