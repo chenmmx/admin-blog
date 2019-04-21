@@ -1,16 +1,13 @@
 module.exports = {
   devServer: {
     proxy: {
-      '/v2': {
-        target: 'http://192.168.1.213:20000',
+      '/api': {
+        target: 'http://127.0.0.1:3000',
         changeOrigin: true,
         pathRewrite: {
-          '^/v2': '/v2'
+          '^/api': '/api'
         }
       }
     }
-  },
-  baseUrl: process.env.NODE_ENV === 'production'
-    ? 'https://chobits-maintain-1258572138.cos.ap-chengdu.myqcloud.com/'
-    : '/'
+  }
 }
