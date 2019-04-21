@@ -7,30 +7,27 @@
       <!-- Header -->
       <template slot="header-left">
         <el-button-group>
-          <el-button>删除</el-button>
         </el-button-group>
       </template>
       <!-- Body -->
       <template slot="body">
         <el-table
           ref="multipleTable"
-          :data="tableData"
+          :data="commentList"
           tooltip-effect="dark"
           style="width: 100%"
           @selection-change="handleSelectionChange"
         >
           <el-table-column type="selection" width="55"></el-table-column>
-          <el-table-column label="公告标题">
-            <template slot-scope="scope">{{ scope.row.date }}</template>
+          <el-table-column label="评论用户">
+            <template slot-scope="scope">{{ scope.row.username }}</template>
           </el-table-column>
-          <el-table-column prop="name" label="状态"></el-table-column>
-          <el-table-column prop="address" label="发起人"></el-table-column>
-          <el-table-column prop="name" label="时间"></el-table-column>
+          <el-table-column prop="content" label="评论内容"></el-table-column>
+          <el-table-column prop="create_time" label="创建时间"></el-table-column>
           <el-table-column prop="action" label="操作" width="100px">
             <template slot-scope="scope">
               <ch-operate>
                 <div slot="option">
-                  <div @click="onUpdate(scope.row.id)">修改</div>
                   <div @click="onDelete(scope.row.id)">删除</div>
                 </div>
               </ch-operate>
@@ -43,83 +40,47 @@
           @current-change="handleCurrentChange"
           :current-page="pageIndex"
           :page-sizes="[10, 20, 50, 100]"
-          :page-size="100"
+          :page-size="pageSize"
           layout="prev, pager, next, jumper"
-          :total="400"
+          :total="total"
           background
         ></el-pagination>
       </template>
     </ch-container>
+    <el-dialog
+      :title="dialogTitle"
+      :visible.sync="dialogVisible"
+      @close="handleClose"
+      width="30%">
+      <el-form label-width="80px" ref="deleteForm">
+        <div style="text-align:center;padding:40px;">确认删除该条评论?</div>
+        <el-row type="flex" justify="center">
+          <el-col :span="10">
+            <el-button @click="dialogVisible = false">取 消</el-button>
+            <el-button type="primary" @click="confirmDelete">确 定</el-button>
+          </el-col>
+        </el-row>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 export default {
   name: 'Article',
+  async created () {
+    await this.getCommentList()
+  },
   data () {
     return {
       title: '评论管理',
-      pageIndex: 1,
-      tableData: [
-        {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        },
-        {
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        },
-        {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        },
-        {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        },
-        {
-          date: '2016-05-08',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        },
-        {
-          date: '2016-05-06',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        },
-        {
-          date: '2016-05-07',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }
-      ],
-      options: [
-        {
-          value: '选项1',
-          label: '黄金糕'
-        },
-        {
-          value: '选项2',
-          label: '双皮奶'
-        },
-        {
-          value: '选项3',
-          label: '蚵仔煎'
-        },
-        {
-          value: '选项4',
-          label: '龙须面'
-        },
-        {
-          value: '选项5',
-          label: '北京烤鸭'
-        }
-      ],
-      value: '',
+      pageIndex: parseInt(this.$route.query.pageIndex) || 1,
+      pageSize: parseInt(this.$route.query.pageSize) || 5,
+      total: 0,
+      dialogTitle: '',
+      dialogVisible: false,
+      commentId: '',
+      commentList: [],
       multipleSelection: []
     }
   },
@@ -127,11 +88,46 @@ export default {
     handleSelectionChange (val) {
       this.multipleSelection = val
     },
-    handleSizeChange (val) {},
-    handleCurrentChange (val) {},
-    onUpdate (id) {
+    handleSizeChange (pageSize) {
+      this.pageSize = pageSize
     },
-    onDelete (id) {
+    async handleCurrentChange (pageIndex) {
+      this.pageIndex = pageIndex
+      this.$router.push(`${this.$route.path}?pageIndex=${this.pageIndex}&pageSize=${this.pageSize}`)
+      await this.getCommentList()
+    },
+    handleClose () {
+      this.commentId = ''
+    },
+    onDelete (commentId) {
+      this.dialogTitle = '删除'
+      this.dialogVisible = true
+      this.commentId = commentId
+    },
+    // 确认删除
+    async confirmDelete () {
+      let result = await this.$http.comment.delete({
+        commentId: this.commentId
+      })
+      if (result.data.status === 0) {
+        this.$notify.success({
+          title: '成功',
+          message: '删除成功'
+        })
+        this.dialogVisible = false
+        await this.getCommentList()
+      }
+    },
+    // 获取评论列表
+    async getCommentList () {
+      let result = await this.$http.comment.getList({
+        pageIndex: this.$route.query.pageIndex || this.pageIndex,
+        pageSize: this.$route.query.pageSize || this.pageSize
+      })
+      if (result.data.status === 0) {
+        this.commentList = result.data.result
+        this.total = result.data.total
+      }
     }
   }
 }
