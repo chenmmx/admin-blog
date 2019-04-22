@@ -6,7 +6,8 @@ const url = {
   getList: commonUrl + '/getListByPage',
   edit: commonUrl + '/edit',
   getInfo: commonUrl + '/getInfo',
-  delete: commonUrl + '/delete'
+  delete: commonUrl + '/delete',
+  login: commonUrl + '/login'
 }
 export default {
   getList (data) {
@@ -20,5 +21,8 @@ export default {
   },
   delete (data) {
     return handleService(url.delete, data, 'POST')
+  },
+  login (data) {
+    return handleService(url.login, data, 'POST')
   }
 }

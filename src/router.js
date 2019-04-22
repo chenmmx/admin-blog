@@ -7,10 +7,11 @@ import Users from '@/views/Users'
 import Management from '@/views/Article/Management'
 import Publish from '@/views/Article/Publish'
 import Account from '@/views/System/Account'
+import Login from '@/views/Login'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   mode: 'history',
   routes: [
     {
@@ -42,6 +43,10 @@ export default new Router({
           component: Account
         }
       ]
+    },
+    {
+      path: '/login',
+      component: Login
     }
     // {
     //   path: '/',
@@ -58,3 +63,18 @@ export default new Router({
     // }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  if (to.path === '/login') {
+    window.sessionStorage.removeItem('token')
+  }
+  let token = window.sessionStorage.getItem('token')
+  console.log(token)
+  if (!token && to.path !== '/login') {
+    next({ path: '/login' })
+  } else {
+    next()
+  }
+})
+
+export default router
