@@ -63,7 +63,7 @@ export default {
                 title: '成功',
                 message: '修改成功'
               })
-              this.$router.push('/datacenter/article/management')
+              this.$router.push('/article/management')
             }
           } else {
             let result = await this.$http.article.add(this.formData)

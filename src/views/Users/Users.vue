@@ -137,6 +137,7 @@ export default {
         password: ''
       }
     },
+    // 用户修改
     async onUpdate (id) {
       this.dialogVisible = true
       this.dialogType = 'edit'
@@ -150,6 +151,7 @@ export default {
         this.formData.password = result.data.result[0].password
       }
     },
+    // 用户删除
     onDelete (id) {
       this.userId = id
       this.dialogVisible = true
