@@ -34,7 +34,7 @@
           </el-table-column>
         </el-table>
         <!-- Pagination -->
-        <el-pagination
+        <!-- <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="pageIndex"
@@ -43,7 +43,7 @@
           layout="prev, pager, next, jumper"
           :total="400"
           background
-        ></el-pagination>
+        ></el-pagination> -->
       </template>
     </ch-container>
     <el-dialog

@@ -97,8 +97,7 @@ export default {
           ] },
         { name: '系统管理',
           children: [
-            { name: '账号管理', path: '/system/account' },
-            { name: '角色管理' }
+            { name: '账号管理', path: '/system/account' }
           ]
         }
       ],

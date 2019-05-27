@@ -16,7 +16,7 @@
           </el-form-item>
           <el-form-item>
             <el-col :span="formCol" style="text-align:center">
-              <el-button type="primary" @click="onSubmit">保存</el-button>
+              <el-button type="primary" @click="onSubmit">发表</el-button>
             </el-col>
           </el-form-item>
         </el-form>

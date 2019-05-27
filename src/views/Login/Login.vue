@@ -21,7 +21,7 @@
           prop="password"
         >
           <el-col :span="20">
-            <el-input v-model="formData.password"></el-input>
+            <el-input v-model="formData.password" type="password"></el-input>
           </el-col>
         </el-form-item>
         <el-row
